@@ -63,7 +63,7 @@ This script automates Warp setup on Debian-based Linux systems (Kali, Ubuntu, De
    sudo chmod +x ./warp_bypass
    sudo ./warp_bypass
    ```
-5. Make sure when you when starts it will show sign-in but you should click on skip for now 
+5. Make sure when it starts it should show you sign-in page but you should click on skip for now 
 ---
 
 ## 📝 Note
