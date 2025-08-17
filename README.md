@@ -55,8 +55,8 @@ This script automates Warp setup on Debian-based Linux systems (Kali, Ubuntu, De
 
 
 ## 📂 Setup
-
-1. make sure  the Warp `.deb` file inside:
+0. Install [Warp.deb](https://www.warp.dev) file.
+1. make sure  the Warp `.deb` file is in same directory of warp_bypass.sh.
 2. install all pakeges above.
 3. Run the bellow command:
    ```
