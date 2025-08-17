@@ -51,6 +51,9 @@ This script automates Warp setup on Debian-based Linux systems (Kali, Ubuntu, De
 
 ---
 
+<img width="1920" height="1080" alt="Screenshot_2025-08-17_14_00_33" src="https://github.com/user-attachments/assets/c1fc09c1-198e-4e3a-8d39-2f8ef89d65e8" />
+
+
 ## 📂 Setup
 
 1. make sure  the Warp `.deb` file inside:
