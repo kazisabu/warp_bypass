@@ -1,6 +1,21 @@
 #!/bin/bash
 set -euo pipefail
-DEB_PKG="warp-terminal_0.2025.08.13.08.12.stable.02_amd64.deb"
+mapfile -t DEB_FILES < <(ls *.deb 2>/dev/null || true)
+if [[ ${#DEB_FILES[@]} -eq 0 ]]; then
+    echo "[!] No .deb package found in current directory"
+    exit 1
+elif [[ ${#DEB_FILES[@]} -eq 1 ]]; then
+    DEB_PKG="${DEB_FILES[0]}"
+    echo "[*] Using package: $DEB_PKG"
+else
+    echo "[*] Multiple .deb files found:"
+    select choice in "${DEB_FILES[@]}"; do
+        if [[ -n "$choice" ]]; then
+            DEB_PKG="$choice"
+            break
+        fi
+    done
+fi
 TMP_USER="warpuser_$RANDOM"
 WARP_BIN="/opt/warpdotdev/warp-terminal/warp"
 SUDOERS_FILE="/etc/sudoers.d/$TMP_USER"
@@ -19,6 +34,7 @@ HAS_DHCLIENT=false
 if command -v dhclient &>/dev/null; then
     HAS_DHCLIENT=true
 fi
+
 if [[ ! -f "$DEB_PKG" ]]; then
     echo "[!] Warp package '$DEB_PKG' not found"
     exit 1
@@ -29,8 +45,9 @@ echo "$TMP_USER ALL=(ALL) NOPASSWD:ALL" > "$SUDOERS_FILE"
 chmod 440 "$SUDOERS_FILE"
 if ! dpkg -l | grep -q warp-terminal; then
     echo "[*] Installing Warp from $DEB_PKG"
-    apt install -y ./"$DEB_PKG"
+    apt install -y "./$DEB_PKG"
 fi
+
 if [[ ! -x "$WARP_BIN" ]]; then
     echo "[!] Warp binary not found or not executable at $WARP_BIN"
     exit 127
@@ -47,7 +64,6 @@ if [[ -n "$IFACE" ]]; then
     ip link set "$IFACE" down
     macchanger -r "$IFACE" >/dev/null
     ip link set "$IFACE" up
-
     if $HAS_DHCLIENT; then
         echo "[*] Renewing DHCP lease"
         dhclient "$IFACE" -r >/dev/null 2>&1 || true
